@@ -1,0 +1,146 @@
+﻿Section 28: Git, Application Programming Interfaces
+Introduction to Application Programming Interfaces (APIs):
+* What is an Application Programming Interface?
+   * a defined interface that allows one software application to interact with another.
+   * It exposes endpoints that clients can use to:
+      * Request data
+      * Modify resources
+      * Trigger certain operations on the server
+   * a set of rules and protocols that lets different software systems talk to each other; it takes a request, sends that request to the server, and then that server sends back a response
+   * essential for building scalable systems, integrating third-party services, and separating front-end from back-end logic.
+* REST API Methods:
+   * When working with a RESTful API, developers typically interact with resources using the following standard HTTP methods:
+      * GET:
+         * Retrieves data from the server
+      * POST:
+         * Sends data to the server to create a new resource (entry in the database)
+      * PUT:
+         * Replaces an existing resource with new data (a complete update, overriding)
+      * PATCH:
+         * Only updates a specific portion of a specified resource
+      * DELETE:
+         * Removes a resource from the server (from the database that is connected to the server)
+* Responses:
+   * APIs (usually) return a response in the JSON format alongside an HTTP status code 
+Structuring API Requests:
+* API Endpoints:
+   * a specific URL path on a server where a resource lives. It's where the API interacts with your application.
+   * the address a developer uses to access different parts of an API. When an app wants to get or send data, it makes a request to a specific endpoint.
+   * Example: The following endpoint is most likely a GET request that returns data for the user with ID = 123
+      * https://api.example.com/users/123
+   * {Base URL}/{endpoint}; In the example above, “https://api.example.com” is the Base URL, “/users/123” is the endpoint 
+* Rate Limit:
+   * a restriction set by an API on how many requests one can make within a certain time period.
+   * Why do APIs need to have a rate limit?
+      * Protect the server from abuse or overload
+      * Ensure fair use among all users
+      * Control costs (especially for paid APIs)
+      * Prevent spam or brute-force attacks
+* Query Parameters:
+   * key-value pairs added to the end of a URL to modify the request without changing the endpoint itself.
+   * Start after the ‘?’ in the URL
+   * ‘&” is used to separate multiple parameters
+   * Use “%20” or “+” instead of using spaces; For example:
+      * ✅ Good: https://api.com/search?query=fitness+shoes
+      * ❌ Bad: https://api.com/search?query=fitness shoes
+   * Example:
+      * https://api.example.com/products?category=shoes&limit=10&sort=price_asc
+      * “category=shoes&limit=10&sort=price_asc” are the query parameters in the URL; It is a GET request that retrieves all of the products where the category = shoes (only return shoes), limit = 10 (only return 10 results), & sort = price_asc (sort by price in ascending order).
+   * Common Use Cases:
+      * Filtering
+      * Sorting
+      * Pagination
+      * Searching
+      * Data range
+   * Optional 
+* Path Parameters:
+   * the dynamic parts of an endpoint. They're used when a developer wants to identify a specific item (like a user, product, post, etc.).
+   * For example, in the URL below, 42 is the path parameter, and it's used to get data for the user with ID 42:
+      * https://api.example.com/users/42
+   * Used for identifying a resource 
+   * Usually required
+* What is JSON?
+*  lightweight, human-readable format for storing and exchanging data, especially between a client (like a browser or app) and a server (like an API).
+* looks a lot like JavaScript objects — it’s made up of key-value pairs; only difference is that a key in a JSON MUST be a string (have quotation marks around it) whereas in a regular Javascript object, the key field should NOT be in quotation marks 
+* Serialization: 
+   * (Javascript object → JSON string) the process of converting a JavaScript object into a string format (like JSON) so it can be easily:
+      * Stored (e.g. in a file or localStorage)
+      * Sent over a network (e.g. in an API request)
+      * Logged or debugged
+   * This is essential because APIs expect a JSON string; not a raw Javascript object
+   * Code Examples:
+      * Serialization: JSON.stringify(Javascript object) 
+      * Parse (turns a JSON into a Javascript object): JSON.parse(JSON data)
+Making Server-Side API Requests with Axios:
+* a backend server (like Node.js, Python, Ruby, etc.) sending a request to an external API (another server or service), getting data, and often sending that data back to the frontend or storing it.
+* What is a Server-Side API Request?
+   * A server-side API request is when a backend (server) communicates with another server or API over the internet. This is commonly done to:
+      * Retrieve data (e.g., weather info, stock prices)
+      * Send data (e.g., post a form submission to another service)
+      * Authenticate users
+      * Communicate with databases or microservices
+   * This is different from client-side API requests (e.g., fetch() in the browser), because it's done from the server, not the user’s browser.
+* Why make API requests on the Server?
+   * Hide API keys and credentials
+   * Avoid CORS issues
+      * CORS stands for Cross-Origin Resource Sharing. It's a security feature implemented by web browsers to control which websites (origins) are allowed to access resources (like APIs) on another domain; it prevents a browser from making requests to a different domain unless that domain explicitly allows it.
+   * Do complex processing or filtering before sending to client
+   * Batch multiple API calls into one
+* Why developers should use axios over native node.js:
+   * Ease of Use & Simplicity:
+      * Uses promises out of the box
+      * Cleaner syntax
+      * Automatic JSON parsing
+   * Built-in Features:
+      * Promise support 
+      * Interceptors
+      * Automatic JSON handling
+      * Timeout handling
+      * Request cancellation
+      * Simple error handling
+   * Much easier to send POST & PUT requests, and use custom headers
+   * Intuitive error objects
+API Authentication:
+* the process of verifying that a request to an API is coming from an authorized and trusted source.
+* Why is API Authentication necessarY?
+   * APIs often provide private, sensitive, or limited-access data, so authentication:
+      * Prevents unauthorized users from accessing protected endpoints
+      * Tracks usage (who is calling the API and how often)
+      * Enforces limits (like rate limits per user or plan)
+      * Secures data — especially for things like login, billing, health info, etc.
+* Common API Authentication Methods:
+   * API Key:
+      * A token sent with each request (usually in headers or query params); Used for Public APIs, basic access control
+      * Used for public APIs & basic access control
+   * Bearer Token (OAuth2):
+      * User logs in, gets a token, and sends that token in future requests
+      * Used for secure APIs & user-specific data
+   * Basic Auth:
+      * Username + password encoded in base64
+      * Used for very simple APIs or testing
+   * Session/Cookie Auth:
+      * Auth stored in session or cookie
+      * Used for web-based user interfaces
+   * JSON Web Token (JWT):
+      * A compact token that stores user claims and is signed
+      * Used for scalable and stateless authentication 
+   * HMAC / Signature Auth:
+      * Signed request using secret key + hash 
+      * Used for financial APIs (Stripe, Coinbase, etc.)
+* Differences between Authentication & Authorization:
+   * Authentication:
+      * the process of verifying the identity of a user, device, or application.
+      * Examples:
+         * Entering a username & password.
+         * Using an API key to identify your app.
+         * Logging in with OAuth (e.g., “Sign in with Google”).
+         * Scanning a fingerprint or using facial recognition.
+
+
+	   * Authorization: 
+      * the process of checking what access or permissions an authenticated user or app has.
+      * Examples:
+         * A user is allowed to read data but not delete it.
+         * An admin can access all pages, but a guest cannot.
+         * An API key is authorized to call only certain endpoints.
+         * Access tokens (like JWTs) define roles and scopes.
