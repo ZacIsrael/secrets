@@ -23,7 +23,7 @@ app.get("/", async (req, res) => {
     // 5. Use axios to get a random secret and pass it to index.ejs to display the
     // secret and the username of the secret.
     const result = await axios.get(`${API_URL}random`);
-    // the random secret retured from the GET request is stored in the result's data object
+    // the random secret retured from the GET request (response) is stored in the result's data object
     let randomSecret = result.data;
     console.log('randomSecret = ', randomSecret);
     res.render('index', {
